@@ -5,13 +5,12 @@ from sklearn.metrics import mean_squared_error, r2_score
 import numpy as np
 
 # 加载数据集
-train_data = pd.read_csv('train12-tg.csv')  # 替换为正确的文件路径
-test_data = pd.read_csv('predict-Tg.csv')    # 替换为正确的文件路径
+train_data = pd.read_csv('train12.csv')  # 替换为正确的文件路径
+test_data = pd.read_csv('test12.csv')    # 替换为正确的文件路径
 
 # 选定的特征
 selected_features = ['Thickness', 'Total Imidization Time', 'g2434951923', 'a864674487', 
-                     'Maximum Imidization Temperature', 'g951226070', 'g4290259127', 
-                     'g3217380708', 'g2968968094', 'a3217380708']
+                     'Maximum Imidization Temperature', 'g951226070', 'g4290259127', 'g3217380708', 'g2968968094', 'a3217380708']
 
 # 分离特征和目标
 X_train = train_data[selected_features]
@@ -81,7 +80,7 @@ print(f"Final Test R2: {test_r2_final}")
 train_predictions = pd.DataFrame({'Actual': y_train, 'Predicted': y_pred_train})
 test_predictions = pd.DataFrame({'Actual': y_test, 'Predicted': y_pred_test})
 
-#train_predictions.to_csv('train_predictions-tg-tt12-10.csv', index=False)
-test_predictions.to_csv('predictions-tg-tt12-10.csv', index=False)
+train_predictions.to_csv('train_predictions-tg-tt12-10.csv', index=False)
+test_predictions.to_csv('test_predictions-tg-tt12-10.csv', index=False)
 
 print("Train and test predictions have been saved.")
