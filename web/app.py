@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, request, render_template, jsonify
 
 from web.dto.Component import Component
@@ -61,4 +63,5 @@ def submit():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, port=5001)
+    port = int(os.environ.get('PORT', 10000))
+    app.run(host='0.0.0.0', port=port)

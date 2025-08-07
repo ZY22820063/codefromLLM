@@ -20,7 +20,7 @@ selected_features = ['Thickness', 'Total Imidization Time', 'g2434951923', 'a864
 
 def tg_predict(sample: SampleData):
     # 加载数据集
-    train_data = pd.read_csv('../train12-tg.csv')
+    train_data = pd.read_csv('./train12-tg.csv')
 
     # 合并字典，确保值是列表
     input_args = {
