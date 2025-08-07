@@ -21,7 +21,7 @@ selected_features = ['Maximum Imidization Temperature', 'a3217380708', 'Total Im
 
 def ts_predict(sample: SampleData):
     # 加载数据集
-    train_data = pd.read_csv('../train2-ts.csv')
+    train_data = pd.read_csv('./train2-ts.csv')
 
     # 合并字典，确保值是列表
     input_args = {
