@@ -21,7 +21,7 @@ selected_features = ['Wavelength (nm)', 'Maximum Imidization Temperature', 'Tota
 
 def tr_predict(sample: SampleData):
     # 加载数据集
-    train_data = pd.read_csv('../train14-tr.csv')
+    train_data = pd.read_csv('./train14-tr.csv')
 
     # 合并字典，确保值是列表
     input_args = {
