@@ -11,30 +11,36 @@
             max-width: 800px;
             padding: 10px;
         }
+
         h1 {
             text-align: center;
             margin-bottom: 20px;
         }
+
         table {
             border-collapse: collapse;
             width: 100%;
             margin-bottom: 20px;
         }
+
         th, td {
             border: 1px solid #000;
             padding: 8px;
             text-align: center;
         }
+
         th {
             background-color: #333;
             color: white;
         }
+
         input {
             width: 90%;
             padding: 5px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
         button {
             padding: 10px;
             background-color: #007bff;
@@ -46,9 +52,11 @@
             display: block;
             width: 100%;
         }
+
         button:hover {
             background-color: #0056b3;
         }
+
         .result-table {
             margin-top: 20px;
             border: 1px solid #ccc;
@@ -56,170 +64,227 @@
             border-collapse: collapse;
             display: none; /* Hidden by default */
         }
+
         .result-table th, .result-table td {
             border: 1px solid #ccc;
             padding: 8px;
             text-align: center;
         }
+
         .result-table th {
             background-color: #343a40;
             color: white;
             text-align: center;
             padding: 8px;
         }
+
         .result-table td {
             padding: 8px;
             text-align: center;
         }
+
         .error {
             color: red;
             margin-top: 10px;
         }
+
+        /* --- START: CSS for Loading Spinner --- */
+        .loader-overlay {
+            position: fixed; /* 固定定位，覆盖整个视口 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8); /* 半透明背景 */
+            display: none; /* 默认隐藏 */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* 确保在最上层 */
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3; /* 浅灰色背景环 */
+            border-top: 8px solid #3498db; /* 蓝色加载环 */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite; /* 应用旋转动画 */
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* --- END: CSS for Loading Spinner --- */
+
     </style>
 </head>
 <body>
-    <h1>Sample Data Predict</h1>
-    <form id="sample-form">
-        <!-- General Parameters Table -->
-        <h2>General Parameters</h2>
-        <table>
-            <tr>
-                <th>Parameter</th>
-                <th>Value</th>
-            </tr>
-            <tr>
-                <td>Maximum Imidization Temperature (°C)</td>
-                <td><input type="text" name="temperature" required></td>
-            </tr>
-            <tr>
-                <td>Thickness (µm)</td>
-                <td><input type="text" name="thickness" required></td>
-            </tr>
-            <tr>
-                <td>Total Imidization Time (min)</td>
-                <td><input type="text" name="time" required></td>
-            </tr>
-            <tr>
-                <td>Wavelength (nm)</td>
-                <td><input type="text" name="wavelength" required></td>
-            </tr>
-        </table>
+<!-- --- START: HTML for Loading Spinner --- -->
+<div id="loader" class="loader-overlay">
+    <div class="spinner"></div>
+</div>
+<!-- --- END: HTML for Loading Spinner --- -->
 
-        <!-- Diamine Table -->
-        <h2>Diamine</h2>
-        <table>
-            <tr>
-                <th>No.</th>
-                <th>SMILES</th>
-                <th>Proportion</th>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td><input type="text" name="diamine1_smiles" required></td>
-                <td><input type="text" name="diamine1_proportion" required></td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td><input type="text" name="diamine2_smiles" required></td>
-                <td><input type="text" name="diamine2_proportion" required></td>
-            </tr>
-        </table>
-
-        <!-- Dianhydride Table -->
-        <h2>Dianhydride</h2>
-        <table>
-            <tr>
-                <th>No.</th>
-                <th>SMILES</th>
-                <th>Proportion</th>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td><input type="text" name="dianhydride1_smiles" required></td>
-                <td><input type="text" name="dianhydride1_proportion" required></td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td><input type="text" name="dianhydride2_smiles" required></td>
-                <td><input type="text" name="dianhydride2_proportion" required></td>
-            </tr>
-        </table>
-
-        <!-- Submit Button -->
-        <button type="submit">Submit</button>
-        <div class="error" id="error-message"></div>
-    </form>
-
-    <!-- Results Table -->
-    <table id="result-table" class="result-table">
-        <thead>
-            <tr>
-                <th>Prediction Type</th>
-                <th>Result</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Tg Prediction</td>
-                <td id="tg-result"></td>
-            </tr>
-            <tr>
-                <td>Tr Prediction</td>
-                <td id="tr-result"></td>
-            </tr>
-            <tr>
-                <td>Ts Prediction</td>
-                <td id="ts-result"></td>
-            </tr>
-        </tbody>
+<h1>Sample Data Predict</h1>
+<form id="sample-form">
+    <!-- General Parameters Table -->
+    <h2>General Parameters</h2>
+    <table>
+        <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Maximum Imidization Temperature (°C)</td>
+            <td><input type="text" name="temperature" required></td>
+        </tr>
+        <tr>
+            <td>Thickness (µm)</td>
+            <td><input type="text" name="thickness" required></td>
+        </tr>
+        <tr>
+            <td>Total Imidization Time (min)</td>
+            <td><input type="text" name="time" required></td>
+        </tr>
+        <tr>
+            <td>Wavelength (nm)</td>
+            <td><input type="text" name="wavelength" required></td>
+        </tr>
     </table>
 
-    <script>
-        const form = document.getElementById('sample-form');
-        const resultTable = document.getElementById('result-table');
-        const tgResult = document.getElementById('tg-result');
-        const trResult = document.getElementById('tr-result');
-        const tsResult = document.getElementById('ts-result');
-        const errorMessage = document.getElementById('error-message');
+    <!-- Diamine Table -->
+    <h2>Diamine</h2>
+    <table>
+        <tr>
+            <th>No.</th>
+            <th>SMILES</th>
+            <th>Proportion</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td><input type="text" name="diamine1_smiles" required></td>
+            <td><input type="text" name="diamine1_proportion" required></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td><input type="text" name="diamine2_smiles" required></td>
+            <td><input type="text" name="diamine2_proportion" required></td>
+        </tr>
+    </table>
 
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevent form from refreshing the page
+    <!-- Dianhydride Table -->
+    <h2>Dianhydride</h2>
+    <table>
+        <tr>
+            <th>No.</th>
+            <th>SMILES</th>
+            <th>Proportion</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td><input type="text" name="dianhydride1_smiles" required></td>
+            <td><input type="text" name="dianhydride1_proportion" required></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td><input type="text" name="dianhydride2_smiles" required></td>
+            <td><input type="text" name="dianhydride2_proportion" required></td>
+        </tr>
+    </table>
 
-            // Collect form data
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
+    <!-- Submit Button -->
+    <button type="submit">Submit</button>
+    <div class="error" id="error-message"></div>
+</form>
 
-            try {
-                // Send POST request
-                const response = await fetch('/submit', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams(data)
-                });
+<!-- Results Table -->
+<table id="result-table" class="result-table">
+    <thead>
+    <tr>
+        <th>Prediction Type</th>
+        <th>Result</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Tg Prediction</td>
+        <td id="tg-result"></td>
+    </tr>
+    <tr>
+        <td>Tr Prediction</td>
+        <td id="tr-result"></td>
+    </tr>
+    <tr>
+        <td>Ts Prediction</td>
+        <td id="ts-result"></td>
+    </tr>
+    </tbody>
+</table>
 
-                if (!response.ok) {
-                    const error = await response.json();
-                    errorMessage.textContent = `Error: ${error.message}`;
-                    resultTable.style.display = 'none';
-                    return;
-                }
+<script>
+    const form = document.getElementById('sample-form');
+    const resultTable = document.getElementById('result-table');
+    const tgResult = document.getElementById('tg-result');
+    const trResult = document.getElementById('tr-result');
+    const tsResult = document.getElementById('ts-result');
+    const errorMessage = document.getElementById('error-message');
 
-                const result = await response.json();
+    // --- START: JavaScript for Loading Spinner ---
+    const loader = document.getElementById('loader');
+    // --- END: JavaScript for Loading Spinner ---
 
-                // Update results
-                tgResult.textContent = result.tg_predict_result;
-                trResult.textContent = result.tr_predict_result;
-                tsResult.textContent = result.ts_predict_result;
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevent form from refreshing the page
 
-                // Show result table
-                resultTable.style.display = 'table';
-                errorMessage.textContent = ''; // Clear any previous error message
-            } catch (error) {
-                console.error('Error:', error);
-                errorMessage.textContent = 'An error occurred while processing your request.';
-                resultTable.style.display = 'none';
+        // --- START: Show loader and clear previous results ---
+        loader.style.display = 'flex'; // 显示加载动画
+        resultTable.style.display = 'none'; // 隐藏旧的结果
+        errorMessage.textContent = ''; // 清除旧的错误信息
+        // --- END: Show loader and clear previous results ---
+
+        // Collect form data
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+            // Send POST request
+            const response = await fetch('/submit', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: new URLSearchParams(data)
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                errorMessage.textContent = `Error: ${error.message}`;
+                return; // 错误时直接返回，finally块会隐藏loader
             }
-        });
-    </script>
+
+            const result = await response.json();
+
+            // Update results
+            tgResult.textContent = result.tg_predict_result;
+            trResult.textContent = result.tr_predict_result;
+            tsResult.textContent = result.ts_predict_result;
+
+            // Show result table
+            resultTable.style.display = 'table';
+        } catch (error) {
+            console.error('Error:', error);
+            errorMessage.textContent = 'An error occurred while processing your request.';
+        } finally {
+            // --- START: Hide loader ---
+            // 无论请求成功还是失败，最后都要隐藏加载动画
+            loader.style.display = 'none';
+            // --- END: Hide loader ---
+        }
+    });
+</script>
 </body>
 </html>
